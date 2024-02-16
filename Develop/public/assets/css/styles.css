@@ -5,6 +5,10 @@ body {
   padding: 0;
 }
 
+.save-note, .new-note, .clear-btn {
+  display: none;
+}
+
 .icons {
   margin-left: 15px;
   margin-right: 15px;
