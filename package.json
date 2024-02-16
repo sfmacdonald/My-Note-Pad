@@ -6,9 +6,20 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Sean MacDonald",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.4"
-  }
+    "express": "^4.18.2",
+    "path": "^0.12.7",
+    "fs": "0.0.1-security",
+    "uniqid": "^5.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sfmacdonald/My-Note-Pad.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sfmacdonald/My-Note-Pad/issues"
+  },
+  "homepage": "https://github.com/sfmacdonald/My-Note-Pad#readme"
 }
