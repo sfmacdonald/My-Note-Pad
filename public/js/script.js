@@ -20,9 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
         newNoteButton.style.display = isNotePresent ? 'none' : 'inline-block';
     }
   
-    // Initially display only the New Note button
-    newNoteButton.style.display = 'inline-block';
-  
     // Update button visibility when there's input in the note title or text
     noteTitleInput.addEventListener('input', updateButtonVisibility);
     noteTextInput.addEventListener('input', updateButtonVisibility);
@@ -68,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
          window.location.reload();
     })
     .catch((error) => {
-        console.error('Error saving note:', error);
+        //console.error('Error saving note:', error);
     });
   });
   
