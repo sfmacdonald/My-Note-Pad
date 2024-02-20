@@ -59,8 +59,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         return response.json();
     })
-        .then(data => {
+    .then(data => {
         console.log('Note saved:', data);
+        
         // Optionally, clear the form
         noteTitleInput.value = '';
         noteTextInput.value = '';
@@ -74,4 +75,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  });
+});
