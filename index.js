@@ -1,9 +1,10 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const { prototype } = require('stream');
 const uniqid = require('uniqid');
 const app = express();
-const port = 5500;
+const PORT = process.env.PORT || 5500;
 
 // Middleware to parse JSON
 app.use(express.json());
@@ -61,6 +62,6 @@ app.get('*', (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
