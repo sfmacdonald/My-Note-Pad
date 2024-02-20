@@ -53,8 +53,13 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         body: JSON.stringify(noteData),
     })
-    .then(response => response.json())
-    .then(data => {
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+        .then(data => {
         console.log('Note saved:', data);
         // Optionally, clear the form
         noteTitleInput.value = '';

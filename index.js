@@ -1,67 +1,71 @@
-const express = require('express');
-const fs = require('fs');
-const path = require('path');
-const { prototype } = require('stream');
-const uniqid = require('uniqid');
-const app = express();
-const PORT = process.env.PORT || 5500;
+const express = require('express')
+const fs = require('fs')
+const path = require('path')
+const { prototype } = require('stream')
+const uniqid = require('uniqid')
+const app = express()
+const PORT = process.env.PORT || 5500
+const db = require('./db/db.json')
 
 // Middleware to parse JSON
 app.use(express.json());
 app.use(express.static('public'));
 
-// API Routes
-// GET /api/notes - Return all saved notes as JSON
+// GET /api/notes should read the db.json file and return all saved notes as JSON.
 app.get('/api/notes', (req, res) => {
+    fs.readFile('./db/db.json', (err, data) => {
+        ///error logging
+        if (err) throw err;
+        let dbData = JSON.parse(data);
+        //Returns new database
+        res.json(dbData)
+    });   
+})
+
+//POST 
+///api/notes receives a new note to save on the request body and add it to db.json, then returns new note to the client.
+app.post('/api/notes', (req, res) => {
+  const newNote = req.body;
+  newNote.id = uuidv4();
+  db.push(newNote);
   try {
-    let db = JSON.parse(fs.readFileSync(path.join(__dirname, 'db/db.json'), 'utf8'));
+    fs.writeFileSync('./db/db.json', JSON.stringify(db));
     res.json(db);
   } catch (error) {
-    res.status(500).send('Error reading note database');
+      console.error('Error saving new note:', error);
+      res.status(500).send('Error saving new note');
   }
 });
 
-// POST /api/notes - Save a new note
-app.post('/api/notes', (req, res) => {
-  try {
-    let db = JSON.parse(fs.readFileSync(path.join(__dirname, 'db/db.json'), 'utf8'));
-    let userNote = {
-      title: req.body.title,
-      text: req.body.text,
-      id: uniqid(),
-    };
-    db.push(userNote);
-    fs.writeFileSync(path.join(__dirname, 'db/db.json'), JSON.stringify(db));
-    res.json(userNote);
-  } catch (error) {
-    res.status(500).send('Error saving note');
-  }
-});
-
-// DELETE /api/notes/:id - Delete a note by id
+//DELETE
+// notes when the button is clicked by removing the note from db.json, saving and showing the updated database on the front end.
 app.delete('/api/notes/:id', (req, res) => {
-  try {
-    let db = JSON.parse(fs.readFileSync(path.join(__dirname, 'db/db.json'), 'utf8'));
-    let updatedDb = db.filter(item => item.id !== req.params.id);
-    fs.writeFileSync(path.join(__dirname, 'db/db.json'), JSON.stringify(updatedDb));
-    res.json(updatedDb);
-  } catch (error) {
-    res.status(500).send('Error deleting note');
-  }
-});
+    const newDb = db.filter((note) =>
+        note.id !== req.params.id)
 
-// HTML Routes
-// GET /notes - Return the notes.html file
+    // update the db.json file to reflect the modified notes array
+    fs.writeFileSync('./db/db.json', JSON.stringify(newDb))
+
+    // send that removed note object back to user
+    readFile.json(newDb)
+})
+
+//HTML Routes
+//Home
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'))
+})
+
+//Notes
 app.get('/notes', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/notes.html'));
-});
+    res.sendFile(path.join(__dirname, 'public', 'notes.html'))
+})
 
-// GET * - Return the index.html file
+//Wildcard Route
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/index.html'));
-});
+    res.sendFile(path.join(__dirname, 'public', 'index.html'))
+})
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
+//App listens with front end on this port
+app.listen(PORT, () =>
+    console.log(`App listening on ${PORT}`))
