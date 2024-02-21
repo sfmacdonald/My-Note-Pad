@@ -5,11 +5,12 @@ const path = require('path');
 const { prototype } = require('stream');
 const uniqid = require('uniqid');
 const app = express();
-const PORT = process.env.PORT || 5500;
+const PORT = process.env.PORT || 3000;
 const db = require('./db/db.json');
+const { v4: uuidv4 } = require('uuid');
 
 app.use(cors({
-  origin: 'http://example.com',
+  origin: '*',
   methods: ['GET', 'POST'], // Allowable methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Custom headers
 }));
@@ -48,14 +49,14 @@ app.post('/api/notes', (req, res) => {
 //DELETE
 // notes when the button is clicked by removing the note from db.json, saving and showing the updated database on the front end.
 app.delete('/api/notes/:id', (req, res) => {
-    const newDb = db.filter((note) =>
-        note.id !== req.params.id)
+  const newDb = db.filter((note) =>
+      note.id !== req.params.id)
 
-    // update the db.json file to reflect the modified notes array
-    fs.writeFileSync('./db/db.json', JSON.stringify(newDb))
+  // update the db.json file to reflect the modified notes array
+  fs.writeFileSync('./db/db.json', JSON.stringify(newDb))
 
-    // send that removed note object back to user
-    readFile.json(newDb)
+  // send that removed note object back to user
+  res.json(newDb)
 })
 
 //HTML Routes

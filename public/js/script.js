@@ -7,72 +7,57 @@ document.addEventListener('DOMContentLoaded', function() {
   
     // Function to check input fields and adjust button visibility
     function updateButtonVisibility() {
-        // Check if there's any data in the note
         const isNotePresent = noteTitleInput.value.trim() !== '' || noteTextInput.value.trim() !== '';
-  
-        // Show save button if there's data in the new note
         saveNoteButton.style.display = isNotePresent ? 'inline-block' : 'none';
-  
-        // Show clear button if there's data in the new note
         clearFormButton.style.display = isNotePresent ? 'inline-block' : 'none';
-  
-         // Hide New Note button if there's data in the new note
         newNoteButton.style.display = isNotePresent ? 'none' : 'inline-block';
     }
   
-    // Update button visibility when there's input in the note title or text
     noteTitleInput.addEventListener('input', updateButtonVisibility);
     noteTextInput.addEventListener('input', updateButtonVisibility);
   
-    // Assuming you want to clear the form with the clearFormButton
     clearFormButton.addEventListener('click', function() {
         noteTitleInput.value = '';
         noteTextInput.value = '';
-        updateButtonVisibility(); // Update buttons visibility after clearing form
+        updateButtonVisibility();
     });
   
-    // Add event listener for the Save Note button
-  saveNoteButton.addEventListener('click', function() {
-    // Collect note data
-    const noteData = {
-        title: noteTitleInput.value.trim(),
-        text: noteTextInput.value.trim(),
-    };
+    saveNoteButton.addEventListener('click', function() {
+        const noteData = {
+            title: noteTitleInput.value.trim(),
+            text: noteTextInput.value.trim(),
+        };
   
-    // Validate note data to ensure it's not empty
-    if (!noteData.title || !noteData.text) {
-        alert('Please fill out both the title and the note text fields.');
-        return;
-    }
-  
-    // Send POST request to save the note
-    fetch('/api/notes', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(noteData),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+        if (!noteData.title || !noteData.text) {
+            alert('Please fill out both the title and the note text fields.');
+            return;
         }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Note saved:', data);
-        
-        // Optionally, clear the form
-        noteTitleInput.value = '';
-        noteTextInput.value = '';
-        updateButtonVisibility(); // Update buttons' visibility
   
-         // Refresh the page to show the updated list of notes
-         window.location.reload();
-    })
-    .catch((error) => {
-        //console.error('Error saving note:', error);
+        fetch('/api/notes', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(noteData),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Note saved:', data);
+            noteTitleInput.value = '';
+            noteTextInput.value = '';
+            updateButtonVisibility();
+            // Provide feedback to the user
+            alert('Note successfully saved!');
+        })
+        .catch((error) => {
+            console.error('Error saving note:', error);
+            // Provide feedback to the user
+            alert('Failed to save note. Please try again.');
+        });
     });
-  });
-  
 });
