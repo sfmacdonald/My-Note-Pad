@@ -29,7 +29,7 @@ The github repository may be found at https://github.com/sfmacdonald/My-Note-Pad
 The live URL for the working website deployed via Heroku is https://my-note-pad-7177df64e9dd.herokuapp.com
 
 When accessed, the initial landing page should reflect the following image: 
-![My Note Pad](</Users/Mac/bootcamp/My-Note-Pad/public/assets/images/Screenshot 2024-02-21 at 12.51.14 PM.png>)
+![My Note Pad](</public/assets/images/Screenshot 2024-02-21 at 12.51.14 PM.png>)
 
 ## Testing
 
