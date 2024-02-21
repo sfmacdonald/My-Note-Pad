@@ -4,6 +4,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const clearFormButton = document.querySelector('.clear-btn');
     const noteTitleInput = document.querySelector('.note-title');
     const noteTextInput = document.querySelector('.note-textarea');
+    
+    // Function to fetch and render notes
+    function fetchNotes() {
+        fetch('/api/notes')
+            .then(response => response.json())
+            .then(notes => {
+                const listGroup = document.getElementById('list-group');
+                listGroup.innerHTML = ''; // Clear the list before adding new notes
+                notes.forEach(note => {
+                    const li = document.createElement('li');
+                    li.classList.add('list-group-item');
+                    li.textContent = `${note.title}: ${note.text}`;
+                    listGroup.appendChild(li);
+                });
+            })
+            .catch(error => console.error('Error fetching notes:', error));
+    }
+  
+    // Initially fetch and render notes
+    fetchNotes();
   
     // Function to check input fields and adjust button visibility
     function updateButtonVisibility() {
@@ -48,6 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             console.log('Note saved:', data);
+             // Refresh the page to reflect the addition of the new note
+             window.location.reload();
             noteTitleInput.value = '';
             noteTextInput.value = '';
             updateButtonVisibility();
